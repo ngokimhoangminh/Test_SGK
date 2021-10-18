@@ -11,6 +11,7 @@
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap">
 
         <!-- Styles -->
+        <link rel="stylesheet" href="{{ asset('css/style.css') }}">
         <link rel="stylesheet" href="{{ asset('css/app.css') }}">
 
         <!-- CSS Icons -->
@@ -36,7 +37,8 @@
         <!-- DataTables --->
         <link rel="stylesheet" href="{{ asset('DataTables/datatables.min.css') }}">
         <script src="{{ asset('DataTables/datatables.min.js') }}" defer></script>
-    
+
+
     </head>
     <body class="font-sans antialiased">
         <div class="min-h-screen bg-white">
@@ -54,5 +56,6 @@
                 {{ $slot }}
             </main>
         </div>
+        @stack('script')
     </body>
 </html>

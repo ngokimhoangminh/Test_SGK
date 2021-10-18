@@ -9,8 +9,13 @@ require('./bootstrap');
 window.Vue = require('vue').default;
 
 import Vue from 'vue';
-import Input from './components/Input/input.vue';
+import 'bootstrap'
+import 'bootstrap/dist/css/bootstrap.min.css'
+
+import Input from './components/input.vue';
 import Label from './components/label.vue';
+import TextArea from './components/textArea.vue';
+import Button from './components/button.vue';
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -23,5 +28,7 @@ const app = new Vue({
     components:{
         'input-form' : Input,
         'label-name' : Label,
+        'text-area':TextArea,
+        'button-action':Button
     }
 });
