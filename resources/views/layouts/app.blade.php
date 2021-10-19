@@ -24,9 +24,7 @@
         <link rel="stylesheet" href="{{ asset('css/fileicon.css') }}">
         <link rel="stylesheet" href="{{ asset('css/shape-triangle.css') }}"> --}}
 
-        <!-- Scripts -->
-        <script src="{{ asset('js/app.js') }}" defer></script>
-
+       
         <!-- jQuery: deferを付けない：先に読み込ませるため -->
         <script src="{{ asset('js/jquery-3.5.1.min.js') }}"></script>
 
@@ -52,10 +50,13 @@
             </header>
 
             <!-- Page Content -->
-            <main class="bg-white">
+            <!-- E phai dat ID, ddeer vuejs render ra -->
+            <main class="bg-white" id="app">
                 {{ $slot }}
             </main>
         </div>
         @stack('script')
+         <!-- Scripts -->
+         <script src="{{ asset('js/app.js') }}" defer></script>
     </body>
 </html>

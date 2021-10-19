@@ -6,7 +6,6 @@
 
 require('./bootstrap');
 
-window.Vue = require('vue').default;
 
 import Vue from 'vue';
 import 'bootstrap'
@@ -16,6 +15,7 @@ import Input from './components/input.vue';
 import Label from './components/label.vue';
 import TextArea from './components/textArea.vue';
 import Button from './components/button.vue';
+import Table from './components/product/table.vue';
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -23,12 +23,18 @@ import Button from './components/button.vue';
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
+window.Vue = Vue;
+Vue.config.productionTip = false
+
 const app = new Vue({
     el: '#app',
     components:{
         'input-form' : Input,
         'label-name' : Label,
         'text-area':TextArea,
-        'button-action':Button
+        'button-action':Button,
+        'table-form':Table
     }
 });
+
+global.vm = app;

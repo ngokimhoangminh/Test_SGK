@@ -1,5 +1,7 @@
 <template>
-  <textarea class="form-control" :rows="rows" :name="name"> </textarea>
+  <textarea class="form-control" :rows="rows" :name="name">
+   <slot />
+  </textarea>
 </template>
 
 <script>

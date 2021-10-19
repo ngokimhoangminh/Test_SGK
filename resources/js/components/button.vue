@@ -1,5 +1,10 @@
 <template>
-  <button :type="type" class="btn btn-info" @click="handleOK()">
+  <button
+    :type="type"
+    :redirect="redirect"
+    :class="className"
+    @click="onClick()"
+  >
     <slot />
   </button>
 </template>
@@ -9,15 +14,22 @@ export default {
   props: {
     type: {
       type: String,
-      default: "button",
+      default: "submit",
+    },
+    redirect: {
+      type: String,
+    },
+    className: {
+      type: String,
+      default: "btn btn-info",
     },
   },
   data() {
     return {};
   },
   methods: {
-    handleOK() {
-      this.$emit("handleSubmit");
+    onClick() {
+      window.location.href = this.redirect;
     },
   },
 };
