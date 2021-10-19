@@ -20,18 +20,18 @@
             </div>
 
             <!-- Email Address -->
-            <!-- <div class="mt-4">
+            <div class="mt-4">
                 <x-label for="email" :value="__('Email')" />
 
                 <x-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required />
-            </div> -->
+            </div>
 
             <!-- LoginID -->
-            <div class="mt-4">
+            <!-- <div class="mt-4">
                 <x-label for="loginid" value="ログインID" />
 
                 <x-input id="loginid" class="block mt-1 w-full" type="text" name="loginid" :value="old('loginid')" required />
-            </div>
+            </div> -->
 
             <!-- Password -->
             <div class="mt-4">
