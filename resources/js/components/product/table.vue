@@ -2,12 +2,8 @@
   <table
     id="data_tables"
     class="
-      table table-bordered
-      hover
+      table table-bordered table-striped table-hover
       data_tables
-      stripe
-      row-border
-      table-auto
       text-sm text-left
       border border-gray-900
       m-4
@@ -16,31 +12,41 @@
   >
     <thead>
       <tr>
-        <th style="">id</th>
+        <th style="">#</th>
         <th style="width: 15%">Sản Phẩm</th>
-        <th style="width: 30%">Giá Gốc</th>
-        <th style="width: 10%">Giảm Giá</th>
+        <th style="width: 15%">Giá Gốc</th>
+        <th style="width: 15%">Giảm Giá</th>
         <th style="width: 15%">Mô Tả</th>
-        <th style="width: 30%">Trạng Thái</th>
+        <th style="width: 15%">Trạng Thái</th>
         <th>Hành Động</th>
       </tr>
     </thead>
     <tbody>
-      <tr v-for="(product, index) in datas" :key="index">
+      <tr
+        v-for="(product, index) in products"
+        :key="index"
+        :id="'row_' + product.id"
+      >
         <td>{{ product.id }}</td>
         <td>{{ product.name }}</td>
         <td>{{ product.price }}</td>
         <td>{{ product.discount }}</td>
         <td>{{ product.description }}</td>
-        <td>{{ product.status }}</td>
+        <td v-if="product.status == IS_SHOW">
+          <button-action>Hiển Thị</button-action>
+        </td>
+        <td v-else>
+          <button-action className="btn btn-danger">Ẩn</button-action>
+        </td>
         <td>
           <button-action
             className="btn btn-success"
             :redirect="`product/${product.id}/edit`"
-            >Cập Nhật</button-action
-          >
+            ><i class="fas fa-edit"></i
+          ></button-action>
           <confirm-delete
-            :action="`/product/delete/${product.id}`"
+            :name="product.name"
+            @onDelete="deleteProduct(product)"
           ></confirm-delete>
         </td>
       </tr>
@@ -49,16 +55,29 @@
 </template>
 
 <script>
+import axios from "axios";
 import Button from "../button";
 import Confirm from "../confirm.vue";
 
 export default {
   props: {
-    datas: Array,
+    products: Array,
   },
   components: {
     "button-action": Button,
     "confirm-delete": Confirm,
+  },
+  data() {
+    return {
+      IS_SHOW: 1,
+    };
+  },
+  methods: {
+    async deleteProduct(product) {
+      const response = await axios.delete(`/product/${product.id}`);
+      Swal.fire("Thành Công!", "Bạn đã xóa sản phẩm thành công", "success");
+      $("#row_" + product.id).remove();
+    },
   },
 };
 </script>

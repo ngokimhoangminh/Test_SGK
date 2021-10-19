@@ -1,10 +1,10 @@
 <?php
-namespace App\Http\Validate\Product;
+namespace App\Http\Requests\Product;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class UpdateValidate extends FormRequest
+class StoreProductRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -19,9 +19,9 @@ class UpdateValidate extends FormRequest
     public function rules()
     {
         return [
-                'name' =>'required|string|min:5:|max:255',
-                'price' =>'required|',
-                'discount' =>'required|',
+                'name' =>'required|unique:products|string|min:5:|max:255',
+                'price' =>'required',
+                'discount' =>'required',
                 'description' => 'required|string|max:255',
                 'status' => 'required',
             ];
@@ -29,6 +29,7 @@ class UpdateValidate extends FormRequest
     public function messages(){
         return [
             'name.required' => 'Yêu cầu nhập tên sản phẩm',
+            'name.unique' => 'Sản phẩm đã có ,xin nhập tên sản phẩm khác',
             'price.required' => 'Bạn phải nhập giá sản phẩm',
             'discount.required' => 'Bạn chưa nhập giá giảm sản phẩm',
             'description.required' => 'Mô tả sản phẩm hiện chưa có',

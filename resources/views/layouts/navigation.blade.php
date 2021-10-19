@@ -15,7 +15,7 @@
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('product.index')" :active="request()->routeIs('product.index')">
+                    <x-nav-link :href="route('product.index')" :active="request()->routeIs('product')">
                         Products
                     </x-nav-link>
                 </div>
@@ -50,6 +50,14 @@
                         </form>
                     </x-slot>
                 </x-dropdown>
+                <form method="POST" action="{{ route('logout') }}">
+                    @csrf
+                    <x-dropdown-link :href="route('logout')"
+                            onclick="event.preventDefault();
+                                        this.closest('form').submit();">
+                        {{ __('Log Out') }}
+                    </x-dropdown-link>
+                </form>
             </div>
 
             <!-- Hamburger -->
