@@ -37,7 +37,6 @@
         
         <!-- DataTables --->
         <link rel="stylesheet" href="{{ asset('DataTables/datatables.min.css') }}">
-        <script src="{{ asset('DataTables/datatables.min.js') }}" defer></script>
 
 
     </head>
@@ -61,7 +60,12 @@
 
          <!-- Scripts -->
          <script src="{{ asset('js/app.js') }}" defer></script>
+
+         <!-- DataTables --->
+        <script src="{{ asset('DataTables/datatables.min.js') }}" defer></script>
+
          <!--Sweetalert-->
          <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+
     </body>
 </html>

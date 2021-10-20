@@ -16,7 +16,7 @@ import Label from './components/label.vue';
 import TextArea from './components/textArea.vue';
 import Button from './components/button.vue';
 import Message from './components/messages.vue';
-import Table from './components/product/table.vue';
+import Confirm from './components/confirm.vue';
 
 
 /**
@@ -36,7 +36,7 @@ const app = new Vue({
         'text-area':TextArea,
         'button-action':Button,
         'message-toast':Message,
-        'table-form':Table
+        'confirm-delete':Confirm,
     }
 });
 
