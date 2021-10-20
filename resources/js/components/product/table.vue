@@ -6,7 +6,6 @@
       data_tables
       text-sm text-left
       border border-gray-900
-      m-4
     "
     style="width: 100%"
   >
@@ -17,7 +16,7 @@
         <th style="width: 15%">Giá Gốc</th>
         <th style="width: 15%">Giảm Giá</th>
         <th style="width: 15%">Mô Tả</th>
-        <th style="width: 15%">Trạng Thái</th>
+        <th>Trạng Thái</th>
         <th>Hành Động</th>
       </tr>
     </thead>
@@ -29,8 +28,8 @@
       >
         <td>{{ product.id }}</td>
         <td>{{ product.name }}</td>
-        <td>{{ product.price }}</td>
-        <td>{{ product.discount }}</td>
+        <td>{{ formatPrice(product.price) }}&nbsp;đ</td>
+        <td>{{ formatPrice(product.discount) }}&nbsp;đ</td>
         <td>{{ product.description }}</td>
         <td v-if="product.status == IS_SHOW">
           <button-action>Hiển Thị</button-action>
@@ -73,6 +72,10 @@ export default {
     };
   },
   methods: {
+    formatPrice(value) {
+      let val = (value / 1).toFixed(0).replace(".", ",");
+      return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    },
     async deleteProduct(product) {
       const response = await axios.delete(`/product/${product.id}`);
       Swal.fire("Thành Công!", "Bạn đã xóa sản phẩm thành công", "success");

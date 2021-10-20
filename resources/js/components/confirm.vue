@@ -11,12 +11,15 @@ export default {
     "button-action": Button,
   },
   props: {
-    action: {
+    route: {
       type: String,
     },
     name: {
       type: String,
       required: false,
+    },
+    id: {
+      type: Number,
     },
   },
   methods: {
@@ -30,8 +33,15 @@ export default {
         confirmButtonText: "Đồng ý",
         cancelButtonText: "Hủy",
       }).then((result) => {
-        this.$emit("onDelete");
+        if (result.value) {
+          this.onDelete();
+        }
       });
+    },
+    async onDelete() {
+      const response = await axios.delete(this.route);
+      Swal.fire("Thành Công!", "Bạn đã xóa thành công", "success");
+      $("#row_" + this.id).remove();
     },
   },
 };
