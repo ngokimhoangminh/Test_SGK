@@ -26,13 +26,6 @@
                 <x-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required />
             </div>
 
-            <!-- LoginID -->
-            <!-- <div class="mt-4">
-                <x-label for="loginid" value="ログインID" />
-
-                <x-input id="loginid" class="block mt-1 w-full" type="text" name="loginid" :value="old('loginid')" required />
-            </div> -->
-
             <!-- Password -->
             <div class="mt-4">
                 <x-label for="password" :value="__('Password')" />

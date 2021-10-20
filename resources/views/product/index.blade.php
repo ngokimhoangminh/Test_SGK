@@ -6,10 +6,8 @@
     </x-slot>
 
     <div class="container">
-        @if (session('status'))
-            <div class="alert alert-success" role="alert">
-                {{ session('status') }}
-            </div>
+        @if (session()->has('status'))
+            <message-toast message="{{ session('status') }}"></message-toast>
         @endif
         <div class ="max-w-7xl mx-auto py-3 sm:px-6 lg:px-0">
             <div class="flex flex-row-reverse pr-px-30">
@@ -20,7 +18,7 @@
         </div>
         <div class ="mx-8 my-4">
             <div id="app">
-                <table-form :datas="{{$product}}"></table-form>
+                <table-form :products="{{$products}}"></table-form>
             </div>
         </div>
     </div>

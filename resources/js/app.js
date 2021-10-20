@@ -15,7 +15,9 @@ import Input from './components/input.vue';
 import Label from './components/label.vue';
 import TextArea from './components/textArea.vue';
 import Button from './components/button.vue';
+import Message from './components/messages.vue';
 import Table from './components/product/table.vue';
+
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -33,6 +35,7 @@ const app = new Vue({
         'label-name' : Label,
         'text-area':TextArea,
         'button-action':Button,
+        'message-toast':Message,
         'table-form':Table
     }
 });

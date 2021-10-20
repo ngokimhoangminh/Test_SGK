@@ -4,8 +4,9 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
-use App\Http\Validate\Product\StoreValidate;
-use App\Http\Validate\Product\UpdateValidate;
+use App\Http\Requests\Product\StoreProductRequest;
+use App\Http\Requests\Product\UpdateProductRequest;
+use Session;
 
 class ProductController extends Controller
 {
@@ -17,8 +18,8 @@ class ProductController extends Controller
     public function index()
     {
         //
-        $product=Product::orderBy('id','desc')->get();
-        return view('product.index')->with(compact('product'));
+        $products=Product::orderBy('id','desc')->get();
+        return view('product.index')->with(compact('products'));
     }
 
     /**
@@ -38,14 +39,15 @@ class ProductController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreValidate $request)
+    public function store(StoreProductRequest $request)
     {
         //
         try{
 
-            $product = Product::create($request->validated());
+            Product::create($request->validated());
+            session()->flash('status', 'Thêm sản phẩm thành công'); 
 
-            return redirect()->route('product.index')->with('status','Thêm sản phẩm thành công');
+            return redirect()->route('product.index');
         }catch(\Throwable $th){
             Log::error($th);
 
@@ -93,14 +95,16 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateValidate $request, Product $product)
+    public function update(UpdateProductRequest $request, Product $product)
     {
         //
         try{
 
             $product->update($request->validated());
 
-            return redirect()->route('product.index')->with('status','Cập nhật sản phẩm thành công');
+            session()->flash('status', 'Cập nhật sản phẩm thành công'); 
+
+            return redirect()->route('product.index');
         }catch(\Throwable $th){
             Log::error($th);
             return redirect()->back();
@@ -113,22 +117,19 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Product $product)
     {
         //
-        dd($id);
-    }
-
-    public function delete($id)
-    {
         try{
 
-            Product::find($id)->delete();
+            $product->delete();
+            return 1;
 
-            return redirect()->route('product.index')->with('status','Đã xóa sản phẩm thành công');
         }catch(\Throwable $th){
+
             Log::error($th);
             return redirect()->back();
         }
     }
+
 }

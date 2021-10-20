@@ -1,6 +1,6 @@
 <template>
   <textarea class="form-control" :rows="rows" :name="name">
-   <slot />
+    {{ value }}
   </textarea>
 </template>
 
@@ -14,6 +14,10 @@ export default {
     name: {
       type: String,
       required: true,
+    },
+    value: {
+      type: String,
+      required: false,
     },
   },
 };
