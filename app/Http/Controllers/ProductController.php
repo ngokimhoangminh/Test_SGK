@@ -19,7 +19,6 @@ class ProductController extends Controller
 
     public function index()
     {
-        //
         return $this->productServices->index();
     }
 
@@ -30,8 +29,7 @@ class ProductController extends Controller
      */
     public function create()
     {
-        //
-        return view('product.create');
+        return $this->productServices->create();
     }
 
     /**
@@ -42,9 +40,7 @@ class ProductController extends Controller
      */
     public function store(StoreProductRequest $request)
     {
-        //
-        return $this->productServices->store($request);
-        
+        return $this->productServices->store($request); 
     }
     
 
@@ -67,9 +63,7 @@ class ProductController extends Controller
      */
     public function edit(Product $product)
     {
-        //
         return $this->productServices->edit($product);
-        
     }
 
     /**
@@ -81,7 +75,6 @@ class ProductController extends Controller
      */
     public function update(UpdateProductRequest $request, $id)
     {
-        //
         return $this->productServices->update($request,$id);
     }
 
@@ -93,7 +86,6 @@ class ProductController extends Controller
      */
     public function destroy($id)
     {
-        //
         return $this->productServices->destroy($id);
     }
 

@@ -21,6 +21,7 @@ class UpdateProductRequest extends FormRequest
         $id = $this->product;
         return [
                 'name' =>['required',Rule::unique('products')->ignore($id),'string','min:5','max:255'],
+                'category_id' =>'required',
                 'price' =>'required',
                 'discount' =>'required',
                 'description' => 'required|string|max:255',
@@ -31,6 +32,7 @@ class UpdateProductRequest extends FormRequest
         return [
             'name.required' => 'Yêu cầu nhập tên sản phẩm',
             'name.unique' => 'Sản phẩm đã có ,xin nhập tên sản phẩm khác',
+            'category_id.required' => 'Bạn chưa chọn dnah mục sản phẩm',
             'price.required' => 'Bạn phải nhập giá sản phẩm',
             'discount.required' => 'Bạn chưa nhập giá giảm sản phẩm',
             'description.required' => 'Mô tả sản phẩm hiện chưa có',
