@@ -17,6 +17,8 @@ import TextArea from './components/textArea.vue';
 import Button from './components/button.vue';
 import Message from './components/messages.vue';
 import Confirm from './components/confirm.vue';
+import Image from './components/image.vue';
+import UploadImage from './components/uploadImage.vue';
 
 
 /**
@@ -37,6 +39,8 @@ const app = new Vue({
         'button-action':Button,
         'message-toast':Message,
         'confirm-delete':Confirm,
+        'el-upload':UploadImage,
+        'el-image':Image
     }
 });
 

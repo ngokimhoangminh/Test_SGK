@@ -38,23 +38,36 @@
                     <th style="width: 15%">Giá Gốc</th>
                     <th style="width: 15%">Giảm Giá</th>
                     <th style="width: 15%">Mô Tả</th>
+                    <th style="width: 15%">Hình Ảnh</th>
                     <th>Trạng Thái</th>
-                    <th>Hành Động</th>
+                    <th style="width: 50%">Hành Động</th>
                 </tr>
                 </thead>
                 <tbody>
                     @foreach ($products as $key => $product)
                     <tr id = "row_{{ $product->id }}">
-                        <td>{{ $product->id }}</td>
-                        <td>{{ $product->name }}</td>
-                        <td>{{ $product->categories->name }}</td>
-                        <td>{{ $product->price }}&nbsp;đ</td>
-                        <td>{{ $product->discount }}&nbsp;đ</td>
-                        <td>{{ $product->description }}</td>
+                        <td class="align-middle">{{ $product->id }}</td>
+                        <td class="align-middle">{{ $product->name }}</td>
+                        <td class="align-middle">{{ $product->categories->name }}</td>
+                        <td class="align-middle">{{ $product->price }}&nbsp;đ</td>
+                        <td class="align-middle">{{ $product->discount }}&nbsp;đ</td>
+                        <td class="align-middle">{{ $product->description }}</td>
+                        <td class="align-middle"><el-image src = "{{ asset('libs/uploads/'.$product->image) }} " width="140px" height="140px"></el-image></td>
                         @if( $product->status )
-                            <td><button-action>Hiển Thị</button-action></td>
+                            <td>
+                                <button-action 
+                                    :redirect = "`{{ route('product.active', $product->id) }}`">
+                                    Hiển Thị
+                                </button-action>
+                            </td>
                         @else
-                            <td><button-action class-name="btn btn-danger">Ẩn</button-action></td>
+                            <td>
+                                <button-action 
+                                    class-name="btn btn-danger" 
+                                    :redirect = "`{{ route('product.active', $product->id) }}`">
+                                    Ẩn
+                                </button-action>
+                            </td>
                         @endif
                         <td>
                             <button-action

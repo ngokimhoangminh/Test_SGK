@@ -2,35 +2,40 @@
 
 namespace App\Http\Services;
 
-use App\Models\Product;
+use File;
+use Session;
+use DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
+use App\Models\Product;
 use App\Http\Repositories\ProductRepositories;
 use App\Http\Repositories\CategoriesRepositories;
-use Session;
+
 
 class ProductServices 
 {
-    protected $prodcutRepositories;
+    protected $productRepositories;
     protected $categoriesRepositories;
 
-    public function __construct(ProductRepositories $prodcutRepositories, CategoriesRepositories $categoriesRepositories)
-    {
-        
-        $this->prodcutRepositories = $prodcutRepositories;
+    public function __construct(
+        ProductRepositories $productRepositories, 
+        CategoriesRepositories $categoriesRepositories
+    ) {
+        $this->productRepositories = $productRepositories;
         $this->categoriesRepositories = $categoriesRepositories;
     }
 
     public function index()
     {
-        $products=$this->prodcutRepositories->index();
+        $products = $this->productRepositories->index();
 
         return view('product.index')->with(compact('products'));
     }
 
     public function create()
     {
-        $categories=$this->categoriesRepositories->index();
+        $categories = $this->categoriesRepositories->index();
 
         return view('product.create')->with(compact('categories'));
     }
@@ -38,16 +43,27 @@ class ProductServices
     public function store($request)
     {
         try{
-            $this->prodcutRepositories->store($request->validated());
+            DB::beginTransaction();
+
+            $data = $request->validated();
+            $image = $request->image;
+            $get_name_image = $image->getClientOriginalName();
+            $name_image = current(explode('.', $get_name_image));
+            $new_image =  $name_image.rand(0,99).'.'.$image->getClientOriginalExtension();
+            $data['image'] = $new_image;
+            Storage::disk('public')->put($new_image, File::get($image));
+            $this->productRepositories->store($data);
+
+            DB::commit();
+
             session()->flash('status', 'Thêm sản phẩm thành công'); 
 
             return redirect()->route('product.index');
-        }catch(\Throwable $th){
-            Log::error($th);
+        }catch(\Exception $e){
+            DB::rollBack();
 
-            return redirect()->back();
-        }
-        
+            return redirect()->back()->withErrors($e->getMessage());
+        } 
     }
     
 
@@ -62,15 +78,18 @@ class ProductServices
         //
     }
 
-    public function edit($product)
+    public function edit($id)
     {
         //
         try{
-            return view('product.edit',compact('product'));
+            $categories = $this->categoriesRepositories->index();
+            $product = $this->productRepositories->show($id);
+
+            return view('product.edit',compact('product', 'categories'));
         }catch(\Throwable $th){
             Log::error($th);
 
-            return redirect()->back();
+            return redirect()->back()->withErrors($e->getMessage());
         }
         
     }
@@ -78,15 +97,35 @@ class ProductServices
     public function update($request,  $id)
     {
         try{
-            $this->prodcutRepositories->update($id, $request->validated());
+            DB::beginTransaction();
+
+            $product = $this->productRepositories->find($id);
+            $data = $request->validated();
+            $image = $request->image;
+            if($image)
+            {
+                $get_name_image = $image->getClientOriginalName();
+                $name_image = current(explode('.', $get_name_image));
+                $new_image =  $name_image.rand(0,99).'.'.$image->getClientOriginalExtension();
+                $data['image'] = $new_image;
+                Storage::disk('public')->put($new_image, File::get($image));
+                if($product->image != "default.png")
+                {
+                    Storage::disk('public')->delete($product->image);
+                }
+            }
+            $this->productRepositories->update($id, $data);
+
+            DB::commit();
+
             session()->flash('status', 'Cập nhật sản phẩm thành công'); 
 
             return redirect()->route('product.index');
-        }catch(\Throwable $th){
-            Log::error($th);
+        }catch(\Exception $e){
+            DB::rollBack();
 
-            return redirect()->back();
-        }
+            return redirect()->back()->withErrors($e->getMessage());
+        } 
     }
 
     /**
@@ -99,13 +138,35 @@ class ProductServices
     {
         //
         try{
-            $this->prodcutRepositories->destroy($id);
+            $product = $this->productRepositories->find($id);
+            if($product->image != "default.png")
+            {
+                Storage::disk('public')->delete($product->image);
+            }
+            $this->productRepositories->destroy($id);
 
             return 1;
         }catch(\Throwable $th){
             Log::error($th);
 
-            return redirect()->back();
+            return redirect()->back()->withErrors($e->getMessage());
         }
+    }
+
+    public function activeProduct($id)
+    {
+        $product = $this->productRepositories->find($id);
+        if($product->status) 
+        {
+            $product->status = Product::IS_UN_ACTIVE;
+            $product->save();
+        }else 
+        {
+            $product->status = Product::IS_ACTIVE;
+            $product->save();
+        }
+        session()->flash('status', 'Cập nhật trạng thái sản phẩm thành công'); 
+
+        return redirect()->route('product.index');
     }
 }

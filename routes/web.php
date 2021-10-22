@@ -36,6 +36,7 @@ Route::get('/dashboard', function () {
 
 //Product
 Route::resource('/product', \App\Http\Controllers\ProductController::class);
+Route::get('/active-product/{id}', [\App\Http\Controllers\ProductController::class,'activeProduct'])->name('product.active');
 
 
 

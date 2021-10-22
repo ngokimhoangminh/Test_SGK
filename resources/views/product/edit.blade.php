@@ -7,7 +7,7 @@
     </x-slot>
 
     <div class="container">
-        <form method="POST" action = "{{ route('product.update',$product->id) }}">
+        <form method="POST" action = "{{ route('product.update',$product->id) }}" enctype='multipart/form-data'>
             @method('PUT')
             @csrf
             <div class="row">
@@ -19,14 +19,25 @@
                     @enderror
                 </div>
                 <div class="form-group col-md-6">
+                    <label-name>Danh Mục</label-name>
+                    <select class="form-control"  name="category_id">
+                        @foreach( $categories as $key => $category )
+                          <option value = "{{ $category->id }}" {{ $category->id == $product->categories->id ? 'selected' : '' }}> {{ $category->name }} </option>
+                        @endforeach
+                    </select>
+                    @error('category_id')
+                        <message-toast class-name="alert alert-danger mt-1" message = "{{ $message  }}"></message-toast>
+                    @enderror
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-md-6">
                     <label-name>Giá Sản Phẩm</label-name>
                     <input-form name="price" value = "{{ $product->price }}"></input-form>
                     @error('price')
                         <message-toast class-name="alert alert-danger mt-1" message = "{{ $message  }}"></message-toast>
                     @enderror
                 </div>
-            </div>
-            <div class="row">
                 <div class="form-group col-md-6">
                     <label-name>Giá Giảm</label-name>
                     <input-form name="discount" value = "{{ $product->discount }}"></input-form>
@@ -34,6 +45,8 @@
                         <message-toast class-name="alert alert-danger mt-1" message = "{{ $message  }}"></message-toast>
                     @enderror
                 </div>
+            </div>
+            <div class="row">
                 <div class="form-group col-md-6">
                     <label-name>Mô Tả</label-name>
                     <text-area name="description" value = "{{ $product->description }}"></text-area>
@@ -41,6 +54,12 @@
                         <message-toast class-name="alert alert-danger mt-1" message = "{{ $message  }}"></message-toast>
                     @enderror
                 </div>
+                <div class="form-group col-md-6">
+                    <el-upload name="image" url-image = "{{ asset('libs/uploads/'.$product->image) }}"></el-upload>
+                    @error('image')
+                        <message-toast class-name="alert alert-danger mt-1" message = "{{ $message  }}"></message-toast>
+                    @enderror
+                </div>      
             </div>
             <div class="row">
                 <div class="form-group col-md-6">
