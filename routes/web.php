@@ -33,10 +33,18 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth'])->name('dashboard');
 
+Route::middleware(['auth'])->group(function (){
+	Route::group([
+		'middleware'=>'is_admin',
+	],function(){
+        //Product
+        Route::resource('/product', \App\Http\Controllers\ProductController::class);
+        Route::get('/active-product/{id}', [\App\Http\Controllers\ProductController::class,'activeProduct'])->name('product.active');
 
-//Product
-Route::resource('/product', \App\Http\Controllers\ProductController::class);
-Route::get('/active-product/{id}', [\App\Http\Controllers\ProductController::class,'activeProduct'])->name('product.active');
+        //Tasks
+        Route::resource('/task', \App\Http\Controllers\TaskController::class);
+	});
+});
 
 
 
