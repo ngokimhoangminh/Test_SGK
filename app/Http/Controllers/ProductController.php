@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Product;
 use Illuminate\Http\Request;
+use App\Models\Product;
 use App\Http\Services\ProductServices;
 use App\Http\Requests\Product\StoreProductRequest;
 use App\Http\Requests\Product\UpdateProductRequest;
@@ -14,7 +14,7 @@ class ProductController extends Controller
 
     public function __construct(ProductServices $productServices)
     {
-        $this->productServices=$productServices;
+        $this->productServices = $productServices;
     }
 
     public function index()
@@ -61,9 +61,9 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Product $product)
+    public function edit($id)
     {
-        return $this->productServices->edit($product);
+        return $this->productServices->edit($id);
     }
 
     /**
@@ -73,9 +73,9 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateProductRequest $request, $id)
+    public function update(UpdateProductRequest $request,  $id)
     {
-        return $this->productServices->update($request,$id);
+        return $this->productServices->update($request, $id);
     }
 
     /**
@@ -87,6 +87,11 @@ class ProductController extends Controller
     public function destroy($id)
     {
         return $this->productServices->destroy($id);
+    }
+
+    public function activeProduct($id)
+    {
+        return $this->productServices->activeProduct($id);
     }
 
 }

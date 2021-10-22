@@ -7,7 +7,7 @@
     </x-slot>
 
     <div class="container">
-        <form method="POST" action = "{{ route('product.store') }}">
+        <form method="POST" action = "{{ route('product.store') }}" enctype='multipart/form-data'>
             @csrf
             <div class="row">
                 <div class="form-group col-md-6">
@@ -53,7 +53,12 @@
                         <message-toast class-name="alert alert-danger mt-1" message = "{{ $message  }}"></message-toast>
                     @enderror
                 </div>
-                
+                <div class="form-group col-md-6">
+                    <el-upload name="image"></el-upload>
+                    @error('image')
+                        <message-toast class-name="alert alert-danger mt-1" message = "{{ $message  }}"></message-toast>
+                    @enderror
+                </div>      
             </div>
             <div class="row">
                 <div class="form-group col-md-6">

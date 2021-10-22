@@ -24,7 +24,8 @@ class StoreProductRequest extends FormRequest
                 'price' =>'required',
                 'discount' =>'required',
                 'description' => 'required|string|max:255',
-                'status' => 'required',
+                'image' => 'required|image|mimes:jpg,png,jpeg,gif,svg|max:2048|dimensions:min_width=100,min_height=100,max_width=2000,max_height=2000', 
+                'status' => 'required'
             ];
     }
     public function messages(){
@@ -35,7 +36,10 @@ class StoreProductRequest extends FormRequest
             'price.required' => 'Bạn phải nhập giá sản phẩm',
             'discount.required' => 'Bạn chưa nhập giá giảm sản phẩm',
             'description.required' => 'Mô tả sản phẩm hiện chưa có',
-            'status.required' => 'Bạn chưa chọn trạng thái cho sản phẩm',
+            'image.required' => 'Bạn chưa chọn hình ảnh',
+            'image.image' => 'Ảnh phải là file ảnh',
+            'image.mimes' => 'Ảnh phải là file ảnh jpg | png | gif | svg',
+            'status.required' => 'Bạn chưa chọn trạng thái cho sản phẩm'
         ];
     }
 }

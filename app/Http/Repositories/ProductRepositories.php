@@ -20,14 +20,19 @@ class ProductRepositories
         return $this->products::with('categories')->orderBy('id','desc')->get();
     }
 
-    public function create()
-    {
-        return $this->categories::orderBy('id','desc')->get();
-    }
-
     public function store($data)
     {
         return $this->products::create($data);
+    }
+
+    public function find($id) 
+    {
+        return $this->products->find($id);
+    }
+        
+    public function show($id) 
+    {
+        return $this->products::with('categories')->where('id',$id)->first();
     }
 
     public function update($id, $data)
