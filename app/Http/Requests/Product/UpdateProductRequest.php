@@ -20,7 +20,7 @@ class UpdateProductRequest extends FormRequest
     {
         $id = $this->product;
         return [
-                'name' =>['required',Rule::unique('products')->ignore($id),'string','min:5','max:255'],
+                'name' =>['required', Rule::unique('products')->ignore($id), 'string', 'min:5', 'max:255'],
                 'category_id' => 'required',
                 'price' => 'required',
                 'discount' => 'required',

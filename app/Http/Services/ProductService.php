@@ -10,32 +10,34 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Product;
 use App\Http\Repositories\ProductRepositories;
-use App\Http\Repositories\CategoriesRepositories;
+use App\Http\Repositories\CategoryRepositories;
 
 
-class ProductServices 
+class ProductService 
 {
     protected $productRepositories;
-    protected $categoriesRepositories;
+    protected $categoryRepositories;
 
     public function __construct(
         ProductRepositories $productRepositories, 
-        CategoriesRepositories $categoriesRepositories
+        CategoryRepositories $categoryRepositories
     ) {
         $this->productRepositories = $productRepositories;
-        $this->categoriesRepositories = $categoriesRepositories;
+        $this->categoryRepositories = $categoryRepositories;
     }
 
     public function index()
     {
         $products = $this->productRepositories->index();
 
-        return view('product.index')->with(compact('products'));
+        return view('product.index', [
+            "products" => $products,
+        ]);
     }
 
     public function create()
     {
-        $categories = $this->categoriesRepositories->index();
+        $categories = $this->categoryRepositories->index();
 
         return view('product.create')->with(compact('categories'));
     }
@@ -51,7 +53,7 @@ class ProductServices
             $name_image = current(explode('.', $get_name_image));
             $new_image =  $name_image.rand(0,99).'.'.$image->getClientOriginalExtension();
             $data['image'] = $new_image;
-            Storage::disk('public')->put($new_image, File::get($image));
+            Storage::disk(config('filesystems.default'))->put($new_image, File::get($image));
             $this->productRepositories->store($data);
 
             DB::commit();
@@ -80,21 +82,17 @@ class ProductServices
 
     public function edit($id)
     {
-        //
         try{
-            $categories = $this->categoriesRepositories->index();
+            $categories = $this->categoryRepositories->index();
             $product = $this->productRepositories->show($id);
 
             return view('product.edit',compact('product', 'categories'));
-        }catch(\Throwable $th){
-            Log::error($th);
-
+        }catch(\Exception $e){
             return redirect()->back()->withErrors($e->getMessage());
         }
-        
     }
 
-    public function update($request,  $id)
+    public function update($request, $id)
     {
         try{
             DB::beginTransaction();
@@ -108,11 +106,8 @@ class ProductServices
                 $name_image = current(explode('.', $get_name_image));
                 $new_image =  $name_image.rand(0,99).'.'.$image->getClientOriginalExtension();
                 $data['image'] = $new_image;
-                Storage::disk('public')->put($new_image, File::get($image));
-                if($product->image != "default.png")
-                {
-                    Storage::disk('public')->delete($product->image);
-                }
+                Storage::disk(config('filesystems.default'))->put($new_image, File::get($image));
+                Storage::disk(config('filesystems.default'))->delete($product->image);
             }
             $this->productRepositories->update($id, $data);
 
@@ -136,19 +131,13 @@ class ProductServices
      */
     public function destroy($id)
     {
-        //
         try{
             $product = $this->productRepositories->find($id);
-            if($product->image != "default.png")
-            {
-                Storage::disk('public')->delete($product->image);
-            }
-            $this->productRepositories->destroy($id);
+            Storage::disk(config('filesystems.default'))->delete($product->image);
+            $result = $this->productRepositories->destroy($id);
 
-            return 1;
-        }catch(\Throwable $th){
-            Log::error($th);
-
+            return $result;
+        }catch(\Exception $e){
             return redirect()->back()->withErrors($e->getMessage());
         }
     }
@@ -158,13 +147,12 @@ class ProductServices
         $product = $this->productRepositories->find($id);
         if($product->status) 
         {
-            $product->status = Product::IS_UN_ACTIVE;
-            $product->save();
+            $product->status = Product::STATUS_INACTIVE;
         }else 
         {
-            $product->status = Product::IS_ACTIVE;
-            $product->save();
+            $product->status = Product::STATUS_ACTIVE;
         }
+        $product->save();
         session()->flash('status', 'Cập nhật trạng thái sản phẩm thành công'); 
 
         return redirect()->route('product.index');

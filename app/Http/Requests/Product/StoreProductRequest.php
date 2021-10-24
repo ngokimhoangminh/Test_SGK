@@ -19,10 +19,10 @@ class StoreProductRequest extends FormRequest
     public function rules()
     {
         return [
-                'name' =>'required|unique:products|string|min:5:|max:255',
-                'category_id' =>'required',
-                'price' =>'required',
-                'discount' =>'required',
+                'name' => 'required|unique:products|string|min:5:|max:255',
+                'category_id' => 'required',
+                'price' => 'required',
+                'discount' => 'required',
                 'description' => 'required|string|max:255',
                 'image' => 'required|image|mimes:jpg,png,jpeg,gif,svg|max:2048|dimensions:min_width=100,min_height=100,max_width=2000,max_height=2000', 
                 'status' => 'required'

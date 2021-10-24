@@ -14,8 +14,8 @@ class Product extends Model
 
  	protected $table = 'products';
 
-    public const IS_ACTIVE=1;
-    public const IS_UN_ACTIVE=0;
+    const STATUS_ACTIVE = 1;
+    const STATUS_INACTIVE = 0;
 
     public function categories()
  	{
