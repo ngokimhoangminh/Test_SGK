@@ -23,6 +23,8 @@ Route::middleware(['auth'])->group(function (){
         Route::get('/active-product/{id}', [\App\Http\Controllers\ProductController::class,'activeProduct'])->name('product.active');
         //Tasks
         Route::resource('/task', \App\Http\Controllers\TaskController::class);
+        //Users
+        Route::resource('/user', \App\Http\Controllers\UserController::class);
 	});
 });
 // 対象エリアデータ

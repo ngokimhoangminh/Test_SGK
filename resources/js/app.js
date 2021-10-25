@@ -18,6 +18,7 @@ import Button from './components/button.vue';
 import Message from './components/messages.vue';
 import Confirm from './components/confirm.vue';
 import Image from './components/image.vue';
+import Password from './components/password.vue';
 import UploadImage from './components/uploadImage.vue';
 
 
@@ -40,7 +41,8 @@ const app = new Vue({
         'message-toast':Message,
         'confirm-delete':Confirm,
         'el-upload':UploadImage,
-        'el-image':Image
+        'el-image':Image,
+        'el-password':Password
     }
 });
 
