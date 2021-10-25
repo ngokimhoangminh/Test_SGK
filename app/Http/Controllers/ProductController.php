@@ -4,22 +4,22 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Product;
-use App\Http\Services\ProductServices;
+use App\Http\Services\ProductService;
 use App\Http\Requests\Product\StoreProductRequest;
 use App\Http\Requests\Product\UpdateProductRequest;
 
 class ProductController extends Controller
 {
-    protected $productServices;
+    protected $productService;
 
-    public function __construct(ProductServices $productServices)
+    public function __construct(ProductService $productService)
     {
-        $this->productServices = $productServices;
+        $this->productService = $productService;
     }
 
     public function index()
     {
-        return $this->productServices->index();
+        return $this->productService->index();
     }
 
     /**
@@ -29,7 +29,7 @@ class ProductController extends Controller
      */
     public function create()
     {
-        return $this->productServices->create();
+        return $this->productService->create();
     }
 
     /**
@@ -40,7 +40,7 @@ class ProductController extends Controller
      */
     public function store(StoreProductRequest $request)
     {
-        return $this->productServices->store($request); 
+        return $this->productService->store($request); 
     }
     
 
@@ -63,7 +63,7 @@ class ProductController extends Controller
      */
     public function edit($id)
     {
-        return $this->productServices->edit($id);
+        return $this->productService->edit($id);
     }
 
     /**
@@ -75,7 +75,7 @@ class ProductController extends Controller
      */
     public function update(UpdateProductRequest $request,  $id)
     {
-        return $this->productServices->update($request, $id);
+        return $this->productService->update($request, $id);
     }
 
     /**
@@ -86,12 +86,12 @@ class ProductController extends Controller
      */
     public function destroy($id)
     {
-        return $this->productServices->destroy($id);
+        return $this->productService->destroy($id);
     }
 
     public function activeProduct($id)
     {
-        return $this->productServices->activeProduct($id);
+        return $this->productService->activeProduct($id);
     }
 
 }

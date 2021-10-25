@@ -55,7 +55,9 @@
                     @enderror
                 </div>
                 <div class="form-group col-md-6">
-                    <el-upload name="image" url-image = "{{ asset('libs/uploads/'.$product->image) }}"></el-upload>
+                    <el-upload 
+                    name="image" 
+                    url-image = "{{ ($product->image=='default.png') ? asset('libs/uploads/'.$product->image) : asset('storage/'.$product->image) }}"></el-upload>
                     @error('image')
                         <message-toast class-name="alert alert-danger mt-1" message = "{{ $message  }}"></message-toast>
                     @enderror

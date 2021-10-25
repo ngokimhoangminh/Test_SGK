@@ -17,12 +17,12 @@ class ProductRepositories
     
     public function index()
     { 
-        return $this->products::with('categories')->orderBy('id','desc')->get();
+        return $this->products->with('categories')->orderBy('id','desc')->get();
     }
 
     public function store($data)
     {
-        return $this->products::create($data);
+        return $this->products->create($data);
     }
 
     public function find($id) 
@@ -32,16 +32,16 @@ class ProductRepositories
         
     public function show($id) 
     {
-        return $this->products::with('categories')->where('id',$id)->first();
+        return $this->products->whereId($id)->with('categories')->first();
     }
 
     public function update($id, $data)
     {
-        return $this->products::find($id)->update($data);
+        return $this->products->find($id)->update($data);
     }
 
     public function destroy($id)
     {
-        return $this->products::find($id)->delete();
+        return $this->products->find($id)->delete();
     }
 }

@@ -5,7 +5,7 @@ namespace App\Http\Repositories;
 use Illuminate\Http\Request;
 use App\Models\Categories;
 
-class CategoriesRepositories
+class CategoryRepositories
 {
     protected $categories;
 

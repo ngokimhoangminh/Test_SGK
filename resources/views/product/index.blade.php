@@ -52,7 +52,10 @@
                         <td class="align-middle">{{ $product->price }}&nbsp;đ</td>
                         <td class="align-middle">{{ $product->discount }}&nbsp;đ</td>
                         <td class="align-middle">{{ $product->description }}</td>
-                        <td class="align-middle"><el-image src = "{{ asset('libs/uploads/'.$product->image) }} " width="140px" height="140px"></el-image></td>
+                        <td class="align-middle">
+                            <el-image src = "{{ ($product->image=='default.png') ? asset('libs/uploads/'.$product->image) : asset('storage/'.$product->image) }}" width="140px" height="140px">
+                            </el-image>
+                        </td>
                         @if( $product->status )
                             <td>
                                 <button-action 
