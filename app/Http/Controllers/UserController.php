@@ -4,21 +4,30 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Services\UserService;
+use App\Http\Services\RoleService;
 use App\Http\Requests\User\StoreUserRequest;
 use App\Http\Requests\User\UpdateUserRequest;
 
 class UserController extends Controller
 {
     protected $userService;
+    protected $roleService;
 
-    public function __construct(UserService $userService)
-    {
+    public function __construct(
+        UserService $userService,
+        RoleService $roleService
+    ) {
         $this->userService = $userService;
+        $this->roleService = $roleService;
     }
 
     public function index()
     {
-        return $this->userService->getAll();
+        $users = $this->userService->getAll();
+
+        return view('users.index', [
+            "users" => $users,
+        ]);
     }
 
     /**
@@ -28,7 +37,9 @@ class UserController extends Controller
      */
     public function create()
     {
-        return $this->userService->create();
+        $roles = $this->roleService->getAll();
+
+        return view('users.create', compact('roles'));
     }
 
     /**
@@ -39,7 +50,14 @@ class UserController extends Controller
      */
     public function store(StoreUserRequest $request)
     {
-        return $this->userService->store($request);
+        try {
+            $this->userService->store($request->validated());
+            session()->flash('status', 'Thêm người dùng thành công');
+
+            return redirect()->route('user.index');
+        } catch (\Exception $e) {
+            return abort(500);
+        }
     }
 
     /**
@@ -61,7 +79,22 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        return $this->userService->edit($id);
+        try {
+            $roles = $this->roleService->getAll();
+            $user = $this->userService->findUserById($id);
+            if (empty($user)) {
+                session()->flash('status', 'Người dùng không tồn tại');
+
+                return redirect()->route('user.index');
+            } else {
+                return view('users.edit', [
+                    "user" => $user,
+                    "roles" => $roles
+                ]);
+            }
+        } catch (\Exception $e) {
+            return redirect()->back()->withErrors($e->getMessage());
+        }
     }
 
     /**
@@ -73,7 +106,14 @@ class UserController extends Controller
      */
     public function update(UpdateUserRequest $request,  $id)
     {
-        return $this->userService->update($request, $id);
+        try {
+            $this->userService->update($request->validated(), $id);
+            session()->flash('status', 'Cập nhật người dùng thành công');
+
+            return redirect()->route('user.index');
+        } catch (\Exception $e) {
+            return redirect()->back()->withErrors($e->getMessage());
+        }
     }
 
     /**
@@ -84,6 +124,12 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        return $this->userService->destroy($id);
+        try {
+            $result = $this->userService->destroy($id);
+
+            return $result;
+        } catch (\Exception $e) {
+            return abort(500);
+        }
     }
 }

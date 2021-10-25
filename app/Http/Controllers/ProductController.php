@@ -2,24 +2,31 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\Product;
 use App\Http\Services\ProductService;
+use App\Http\Services\CategoryService;
 use App\Http\Requests\Product\StoreProductRequest;
 use App\Http\Requests\Product\UpdateProductRequest;
 
 class ProductController extends Controller
 {
     protected $productService;
+    protected $categoryService;
 
-    public function __construct(ProductService $productService)
-    {
+    public function __construct(
+        CategoryService $categoryService,
+        ProductService $productService
+    ) {
+        $this->categoryService = $categoryService;
         $this->productService = $productService;
     }
 
     public function index()
     {
-        return $this->productService->index();
+        $products = $this->productService->getAll();
+
+        return view('product.index', [
+            "products" => $products,
+        ]);
     }
 
     /**
@@ -29,7 +36,9 @@ class ProductController extends Controller
      */
     public function create()
     {
-        return $this->productService->create();
+        $categories = $this->categoryService->getAll();
+
+        return view('product.create', compact('categories'));
     }
 
     /**
@@ -40,9 +49,16 @@ class ProductController extends Controller
      */
     public function store(StoreProductRequest $request)
     {
-        return $this->productService->store($request); 
+        try {
+            $this->productService->store($request->validated());
+            session()->flash('status', 'Thêm sản phẩm thành công');
+
+            return redirect()->route('product.index');
+        } catch (\Exception $e) {
+            return redirect()->back()->withErrors($e->getMessage());
+        }
     }
-    
+
 
     /**
      * Display the specified resource.
@@ -63,7 +79,22 @@ class ProductController extends Controller
      */
     public function edit($id)
     {
-        return $this->productService->edit($id);
+        try {
+            $categories = $this->categoryService->getAll();
+            $product = $this->productService->findProductById($id);
+            if (empty($product)) {
+                session()->flash('status', 'Sản phẩm không tồn tại');
+
+                return redirect()->route('product.index');
+            } else {
+                return view('product.edit', [
+                    "product" => $product,
+                    "categories" => $categories
+                ]);
+            }
+        } catch (\Exception $e) {
+            return redirect()->back()->withErrors($e->getMessage());
+        }
     }
 
     /**
@@ -75,7 +106,14 @@ class ProductController extends Controller
      */
     public function update(UpdateProductRequest $request,  $id)
     {
-        return $this->productService->update($request, $id);
+        try {
+            $this->productService->update($request->validated(), $id);
+            session()->flash('status', 'Cập nhật sản phẩm thành công');
+
+            return redirect()->route('product.index');
+        } catch (\Exception $e) {
+            return abort(500);
+        }
     }
 
     /**
@@ -86,12 +124,24 @@ class ProductController extends Controller
      */
     public function destroy($id)
     {
-        return $this->productService->destroy($id);
+        try {
+            $result = $this->productService->destroy($id);
+
+            return $result;
+        } catch (\Exception $e) {
+            return abort(500);
+        }
     }
 
     public function activeProduct($id)
     {
-        return $this->productService->activeProduct($id);
-    }
+        try {
+            $this->productService->activeProduct($id);
+            session()->flash('status', 'Cập nhật trạng thái sản phẩm thành công');
 
+            return redirect()->route('product.index');
+        } catch (\Exception $e) {
+            return abort(500);
+        }
+    }
 }

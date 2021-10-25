@@ -2,6 +2,7 @@
 
 namespace App\Http\Repositories;
 
+use Illuminate\Support\Facades\Log;
 use App\Http\Repositories\RepositoryInterface;
 
 abstract class BaseRepository implements RepositoryInterface
@@ -29,21 +30,55 @@ abstract class BaseRepository implements RepositoryInterface
 
     public function find($id)
     {
-        return $this->model->find($id);
+        try {
+            return $this->model->find($id);
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            throw $e;
+        }
     }
 
     public function store($data)
     {
-        return $this->model->create($data);
+        try {
+            return $this->model->create($data);
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            throw $e;
+        }
     }
 
     public function update($id, $data)
     {
-        return $this->find($id)->update($data);
+        try {
+            $result = $this->find($id);
+            if ($result) {
+                $result->update($data);
+
+                return $result;
+            }
+
+            return false;
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            throw $e;
+        }
     }
 
     public function destroy($id)
     {
-        return $this->find($id)->delete();
+        try {
+            $data = $this->find($id);
+            if ($data) {
+                $data->delete();
+
+                return true;
+            }
+
+            return false;
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            throw $e;
+        }
     }
 }

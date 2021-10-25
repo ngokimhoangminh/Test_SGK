@@ -44,11 +44,7 @@ export default {
   },
   methods: {
     onChange() {
-      if (this.valueUpdate.length > 0) {
-        this.isShow = false;
-      } else {
-        this.isShow = true;
-      }
+      this.isShow = this.valueUpdate.length > 0 ? true : false;
     },
     onClick() {
       if (this.type == "password") {

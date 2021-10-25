@@ -2,156 +2,107 @@
 
 namespace App\Http\Services;
 
-use Session;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use App\Models\Product;
-use App\Http\Repositories\ProductRepositories;
-use App\Http\Repositories\CategoryRepositories;
-
+use App\Http\Repositories\Product\ProductRepositoryInterface;
 
 class ProductService
 {
-    protected $productRepositories;
-    protected $categoryRepositories;
+    protected $productRepository;
 
-    public function __construct(
-        ProductRepositories $productRepositories,
-        CategoryRepositories $categoryRepositories
-    ) {
-        $this->productRepositories = $productRepositories;
-        $this->categoryRepositories = $categoryRepositories;
-    }
-
-    public function index()
+    public function __construct(ProductRepositoryInterface $productRepository)
     {
-        $products = $this->productRepositories->index();
-
-        return view('product.index', [
-            "products" => $products,
-        ]);
+        $this->productRepository = $productRepository;
     }
 
-    public function create()
+    public function getAll()
     {
-        $categories = $this->categoryRepositories->index();
-
-        return view('product.create')->with(compact('categories'));
+        return $this->productRepository->getAll();
     }
 
-    public function store($request)
+    public function store($data)
     {
         try {
-            DB::beginTransaction();
-
-            $data = $request->validated();
-            $image = $request->image;
-            $get_name_image = $image->getClientOriginalName();
-            $name_image = current(explode('.', $get_name_image));
-            $new_image =  $name_image . rand(0, 99) . '.' . $image->getClientOriginalExtension();
-            $data['image'] = $new_image;
-            Storage::disk(config('filesystems.default'))->put($new_image, File::get($image));
-            $this->productRepositories->store($data);
-
-            DB::commit();
-
-            session()->flash('status', 'Thêm sản phẩm thành công');
-
-            return redirect()->route('product.index');
-        } catch (\Exception $e) {
-            DB::rollBack();
-
-            return redirect()->back()->withErrors($e->getMessage());
-        }
-    }
-
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    public function edit($id)
-    {
-        try {
-            $categories = $this->categoryRepositories->index();
-            $product = $this->productRepositories->show($id);
-
-            return view('product.edit', compact('product', 'categories'));
-        } catch (\Exception $e) {
-            return redirect()->back()->withErrors($e->getMessage());
-        }
-    }
-
-    public function update($request, $id)
-    {
-        try {
-            DB::beginTransaction();
-
-            $product = $this->productRepositories->find($id);
-            $data = $request->validated();
-            $image = $request->image;
-            if ($image) {
-                $get_name_image = $image->getClientOriginalName();
-                $name_image = current(explode('.', $get_name_image));
-                $new_image =  $name_image . rand(0, 99) . '.' . $image->getClientOriginalExtension();
-                $data['image'] = $new_image;
-                Storage::disk(config('filesystems.default'))->put($new_image, File::get($image));
-                Storage::disk(config('filesystems.default'))->delete($product->image);
-            }
-            $this->productRepositories->update($id, $data);
-
-            DB::commit();
-
-            session()->flash('status', 'Cập nhật sản phẩm thành công');
-
-            return redirect()->route('product.index');
-        } catch (\Exception $e) {
-            DB::rollBack();
-
-            return redirect()->back()->withErrors($e->getMessage());
-        }
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        try {
-            $product = $this->productRepositories->find($id);
-            Storage::disk(config('filesystems.default'))->delete($product->image);
-            $result = $this->productRepositories->destroy($id);
+            $image = $data['image'];
+            $newImage = Str::uuid()->toString() . '.' . $image->getClientOriginalExtension();
+            $data['image'] = $newImage;
+            Storage::disk(config('filesystems.default'))->put($newImage, File::get($image));
+            $result = $this->productRepository->store($data);
 
             return $result;
         } catch (\Exception $e) {
-            return redirect()->back()->withErrors($e->getMessage());
+            Log::error($e->getMessage());
+            throw $e;
+        }
+    }
+
+    public function findProductById($id)
+    {
+        try {
+            $product = $this->productRepository->find($id);
+
+            return $product;
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            throw $e;
+        }
+    }
+
+    public function update($data, $id)
+    {
+        try {
+            DB::beginTransaction();
+            $product = $this->productRepository->find($id);
+            if (isset($data['image'])) {
+                $image = $data['image'];
+                $newImage = Str::uuid()->toString() . '.' . $image->getClientOriginalExtension();
+                $data['image'] = $newImage;
+                Storage::disk(config('filesystems.default'))->put($newImage, File::get($image));
+                Storage::disk(config('filesystems.default'))->delete($product->image);
+            }
+            $result = $this->productRepository->update($id, $data);
+            DB::commit();
+
+            return $result;
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            throw $e;
+        }
+    }
+
+    public function destroy($id)
+    {
+        try {
+            $product = $this->productRepository->find($id);
+            Storage::disk(config('filesystems.default'))->delete($product->image);
+            $result = $this->productRepository->destroy($id);
+
+            return $result;
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            throw $e;
         }
     }
 
     public function activeProduct($id)
     {
-        $product = $this->productRepositories->find($id);
-        if ($product->status) {
-            $product->status = Product::STATUS_INACTIVE;
-        } else {
-            $product->status = Product::STATUS_ACTIVE;
-        }
-        $product->save();
-        session()->flash('status', 'Cập nhật trạng thái sản phẩm thành công');
+        try {
+            $product = $this->productRepository->find($id);
+            if ($product->status) {
+                $product->status = Product::STATUS_INACTIVE;
+            } else {
+                $product->status = Product::STATUS_ACTIVE;
+            }
+            $result = $product->save();
 
-        return redirect()->route('product.index');
+            return $result;
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            throw $e;
+        }
     }
 }

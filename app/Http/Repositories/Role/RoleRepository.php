@@ -8,6 +8,6 @@ class RoleRepository extends BaseRepository
 {
     public function getModel()
     {
-        return \App\Models\Roles::class;
+        return \App\Models\Role::class;
     }
 }

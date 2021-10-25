@@ -10,21 +10,21 @@ use App\Models\Categories;
 class Product extends Model
 {
     use HasFactory;
-    protected $guarded=[];
+    protected $guarded = [];
 
- 	protected $table = 'products';
+    protected $table = 'products';
 
     const STATUS_ACTIVE = 1;
     const STATUS_INACTIVE = 0;
 
     public function categories()
- 	{
- 		return $this->belongsTo(Categories::class,'category_id','id');
- 	}
-
-    public function scopeActive($query,$status)
     {
-        return $query->where('status',$status);
+        return $this->belongsTo(Category::class, 'category_id', 'id');
+    }
+
+    public function scopeActive($query, $status)
+    {
+        return $query->where('status', $status);
     }
 
     public function getNameAttribute($value)
@@ -39,21 +39,21 @@ class Product extends Model
 
     public function getPriceAttribute($value)
     {
-        return number_format($value,0,',','.');
+        return number_format($value, 0, ',', '.');
     }
 
     public function getDiscountAttribute($value)
     {
-        return number_format($value,0,',','.');
+        return number_format($value, 0, ',', '.');
     }
 
     public function setPriceAttribute($value)
     {
-        $this->attributes['price'] = str_replace('.','',$value);
+        $this->attributes['price'] = str_replace('.', '', $value);
     }
 
     public function setDiscountAttribute($value)
     {
-        $this->attributes['discount'] = str_replace('.','',$value);
+        $this->attributes['discount'] = str_replace('.', '', $value);
     }
 }
