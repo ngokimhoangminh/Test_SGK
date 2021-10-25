@@ -4,14 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Categories;
 
 class Categories extends Model
 {
-    use HasFactory;
+	use HasFactory;
 
-    public function products()
- 	{
- 		return $this->hasMany(Product::class,'category_id','id');
- 	}
+	public function products()
+	{
+		return $this->hasMany(Product::class, 'category_id', 'id');
+	}
 }

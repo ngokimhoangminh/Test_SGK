@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Roles extends Model
 {
     use HasFactory;
-    protected $table = 'role';
+    protected $table = 'roles';
 
     const IS_ADMIN=1;
     const IS_MANAGER=2;

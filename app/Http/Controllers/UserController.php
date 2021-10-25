@@ -3,21 +3,22 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Http\Services\TaskService;
-use App\Models\Tasks;
+use App\Http\Services\UserService;
+use App\Http\Requests\User\StoreUserRequest;
+use App\Http\Requests\User\UpdateUserRequest;
 
-class TaskController extends Controller
+class UserController extends Controller
 {
-    protected $taskService;
+    protected $userService;
 
-    public function __construct(TaskService $taskService)
+    public function __construct(UserService $userService)
     {
-        $this->taskService = $taskService;
+        $this->userService = $userService;
     }
 
     public function index()
     {
-        return $this->taskService->index();
+        return $this->userService->getAll();
     }
 
     /**
@@ -27,9 +28,7 @@ class TaskController extends Controller
      */
     public function create()
     {
-        $this->authorize('create', Tasks::class);
-
-        return view('task.create');
+        return $this->userService->create();
     }
 
     /**
@@ -38,9 +37,9 @@ class TaskController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreUserRequest $request)
     {
-        //
+        return $this->userService->store($request);
     }
 
     /**
@@ -60,11 +59,9 @@ class TaskController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Tasks $task)
+    public function edit($id)
     {
-        $this->authorize('update', $task);
-
-        return view('task.edit')->with(compact('task'));
+        return $this->userService->edit($id);
     }
 
     /**
@@ -74,9 +71,9 @@ class TaskController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdateUserRequest $request,  $id)
     {
-        //
+        return $this->userService->update($request, $id);
     }
 
     /**
@@ -85,8 +82,8 @@ class TaskController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Tasks $task)
+    public function destroy($id)
     {
-        $this->authorize('delete', $task);
+        return $this->userService->destroy($id);
     }
 }
