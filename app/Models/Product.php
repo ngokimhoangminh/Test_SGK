@@ -17,7 +17,7 @@ class Product extends Model
     const STATUS_ACTIVE = 1;
     const STATUS_INACTIVE = 0;
 
-    public function categories()
+    public function category()
     {
         return $this->belongsTo(Category::class, 'category_id', 'id');
     }
@@ -32,28 +32,28 @@ class Product extends Model
         return strtoupper($value);
     }
 
-    public function getNamePriceAttribute()
-    {
-        return "{$this->name} - {$this->price}đ";
-    }
-
     public function getPriceAttribute($value)
     {
-        return number_format($value, 0, ',', '.');
+        return number_format($value, 0, ',', ',');
     }
 
     public function getDiscountAttribute($value)
     {
-        return number_format($value, 0, ',', '.');
+        return number_format($value, 0, ',', ',');
+    }
+
+    public function getNamePriceAttribute()
+    {
+        return $this->name . ' - ' . $this->price . ' đ ';
     }
 
     public function setPriceAttribute($value)
     {
-        $this->attributes['price'] = str_replace('.', '', $value);
+        $this->attributes['price'] = str_replace(',', '', $value);
     }
 
     public function setDiscountAttribute($value)
     {
-        $this->attributes['discount'] = str_replace('.', '', $value);
+        $this->attributes['discount'] = str_replace(',', '', $value);
     }
 }

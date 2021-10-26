@@ -1,71 +1,78 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>{{ config('app.name', 'Laravel') }}</title>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <!-- Fonts -->
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap">
+    <title>{{ config('app.name', 'Laravel') }}</title>
 
-        <!--Fontawesome-->
-        <link href="https://use.fontawesome.com/releases/v5.0.4/css/all.css" rel="stylesheet">
+    <!-- Fonts -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap">
 
-        <!-- Styles -->
-        <link rel="stylesheet" href="{{ asset('css/style.css') }}">
-        <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+    <!--Fontawesome-->
+    <link href="https://use.fontawesome.com/releases/v5.0.4/css/all.css" rel="stylesheet">
 
-        <!-- CSS Icons -->
-        <link rel="stylesheet" href="{{ asset('css/pen.css') }}">
-        {{-- <link rel="stylesheet" href="{{ asset('css/printer.css') }}">
-        <link rel="stylesheet" href="{{ asset('css/trash.css') }}">
-        <link rel="stylesheet" href="{{ asset('css/check-o.css') }}">
-        <link rel="stylesheet" href="{{ asset('css/corner-down-left.css') }}">
-        <link rel="stylesheet" href="{{ asset('css/search.css') }}">
-        <link rel="stylesheet" href="{{ asset('css/fileicon.css') }}">
-        <link rel="stylesheet" href="{{ asset('css/shape-triangle.css') }}"> --}}
+    <!-- Styles -->
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/app.css') }}">
 
-       
-        <!-- jQuery: deferを付けない：先に読み込ませるため -->
-        <script src="{{ asset('js/jquery-3.5.1.min.js') }}"></script>
-
-		<!-- jQueryUI -->
-        <link rel="stylesheet" href="{{ asset('jquery-ui-1.12.1/jquery-ui.min.css') }}">
-        <script src="{{ asset('jquery-ui-1.12.1/jquery-ui.min.js') }}" defer></script>
-        
-        <!-- DataTables --->
-        <link rel="stylesheet" href="{{ asset('DataTables/datatables.min.css') }}">
+    <!-- CSS Icons -->
+    <link rel="stylesheet" href="{{ asset('css/pen.css') }}">
+    {{-- <link rel="stylesheet" href="{{ asset('css/printer.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/trash.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/check-o.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/corner-down-left.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/search.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/fileicon.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/shape-triangle.css') }}"> --}}
 
 
-    </head>
-    <body class="font-sans antialiased">
-        <div class="min-h-screen bg-white">
-            @include('layouts.navigation')
+    <!-- jQuery: deferを付けない：先に読み込ませるため -->
+    <script src="{{ asset('js/jquery-3.5.1.min.js') }}"></script>
 
-            <!-- Page Heading -->
-            <header class="bg-white">
-                <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                    {{ $header }}
-                </div>
-            </header>
+    <!-- jQueryUI -->
+    <link rel="stylesheet" href="{{ asset('jquery-ui-1.12.1/jquery-ui.min.css') }}">
+    <script src="{{ asset('jquery-ui-1.12.1/jquery-ui.min.js') }}" defer></script>
 
-            <!-- Page Content -->
-            <!-- E phai dat ID, ddeer vuejs render ra -->
-            <main class="bg-white" id="app">
-                {{ $slot }}
-            </main>
-        </div>
+    <!-- DataTables --->
+    <link rel="stylesheet" href="{{ asset('DataTables/datatables.min.css') }}">
 
-         <!-- Scripts -->
-         <script src="{{ asset('js/app.js') }}" defer></script>
 
-         <!-- DataTables --->
-        <script src="{{ asset('DataTables/datatables.min.js') }}" defer></script>
+</head>
 
-         <!--Sweetalert-->
-         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+<body class="font-sans antialiased">
+    <div class="min-h-screen bg-white">
+        @include('layouts.navigation')
 
-    </body>
+        <!-- Page Heading -->
+        <header class="bg-white">
+            <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+                {{ $header }}
+            </div>
+        </header>
+
+        <!-- Page Content -->
+        <!-- E phai dat ID, ddeer vuejs render ra -->
+        <main class="bg-white" id="app">
+            {{ $slot }}
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <script src="{{ asset('js/app.js') }}" defer></script>
+
+    <!-- DataTables --->
+    <script src="{{ asset('DataTables/datatables.min.js') }}" defer></script>
+    <script src="{{ asset('DataTables/RowReorder-1.2.7/js/dataTables.rowReorder.min.js') }}" defer></script>
+    @include('helpers.datatables')
+
+    <!--Sweetalert-->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+
+    @stack('after-script')
+
+</body>
+
 </html>

@@ -10,7 +10,7 @@
       />
     </div>
     <div v-if="urlImage" class="mb-3">
-      <img :src="urlImage" />
+      <img :src="urlImage" :width="width" :height="height" />
     </div>
   </div>
 </template>
@@ -24,6 +24,14 @@ export default {
   props: {
     name: String,
     urlImage: {
+      type: String,
+      required: false,
+    },
+    width: {
+      type: String,
+      required: false,
+    },
+    height: {
       type: String,
       required: false,
     },

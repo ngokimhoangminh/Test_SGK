@@ -14,7 +14,7 @@ class Role extends Model
     const IS_MANAGER = 2;
     const IS_CUSTOMER = 3;
 
-    public function user()
+    public function users()
     {
         return $this->hasMany(User::class, 'role_id', 'id');
     }

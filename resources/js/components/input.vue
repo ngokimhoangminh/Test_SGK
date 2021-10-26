@@ -2,8 +2,9 @@
   <input
     class="form-control"
     type="text"
-    :value="updateValue"
+    :value="value"
     :name="name"
+    :data-type="dataType"
     ref="input"
   />
 </template>
@@ -15,7 +16,11 @@ export default {
       type: String,
       required: true,
     },
-    updateValue: {
+    value: {
+      type: String,
+      required: false,
+    },
+    dataType: {
       type: String,
       required: false,
     },

@@ -14,21 +14,22 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth'])->name('dashboard');
 
-Route::middleware(['auth'])->group(function (){
-	Route::group([
-		'middleware'=>'is_admin',
-	],function(){
+Route::middleware(['auth'])->group(function () {
+    Route::group([
+        'as' => 'admin.',
+        'middleware' => 'is_admin',
+        'prefix' => 'admin'
+    ], function () {
         //Product
-        Route::resource('/product', \App\Http\Controllers\ProductController::class);
-        Route::get('/active-product/{id}', [\App\Http\Controllers\ProductController::class,'activeProduct'])->name('product.active');
+        Route::resource('/products', \App\Http\Controllers\ProductController::class);
+        Route::get('products/active/{id}', [\App\Http\Controllers\ProductController::class, 'activeProduct'])->name('products.active');
         //Tasks
-        Route::resource('/task', \App\Http\Controllers\TaskController::class);
+        Route::resource('/tasks', \App\Http\Controllers\TaskController::class);
         //Users
-        Route::resource('/user', \App\Http\Controllers\UserController::class);
-	});
+        Route::resource('/users', \App\Http\Controllers\UserController::class);
+    });
 });
 // 対象エリアデータ
 Route::match(['get', 'post'], 'target_areas/ajaxGetAddressData/{postal_code}', 'App\Http\Controllers\TargetAreasController@ajaxGetAddressData')->middleware(['auth']);
 
-require __DIR__.'/auth.php';
-
+require __DIR__ . '/auth.php';

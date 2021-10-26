@@ -24,13 +24,24 @@ class ProductService
         return $this->productRepository->getAll();
     }
 
+    public function handleUploadedImage($image, $product = null)
+    {
+        if (!is_null($product)) {
+            Storage::disk(config('filesystems.default'))->delete($product->image);
+        }
+        if (!is_null($image)) {
+            $newImage = Str::uuid()->toString() . '.' . $image->getClientOriginalExtension();
+            Storage::disk(config('filesystems.default'))->put($newImage, File::get($image));
+
+            return $newImage;
+        }
+    }
+
     public function store($data)
     {
         try {
-            $image = $data['image'];
-            $newImage = Str::uuid()->toString() . '.' . $image->getClientOriginalExtension();
+            $newImage = $this->handleUploadedImage($data['image']);
             $data['image'] = $newImage;
-            Storage::disk(config('filesystems.default'))->put($newImage, File::get($image));
             $result = $this->productRepository->store($data);
 
             return $result;
@@ -58,11 +69,8 @@ class ProductService
             DB::beginTransaction();
             $product = $this->productRepository->find($id);
             if (isset($data['image'])) {
-                $image = $data['image'];
-                $newImage = Str::uuid()->toString() . '.' . $image->getClientOriginalExtension();
+                $newImage  = $this->handleUploadedImage($data['image'], $product);
                 $data['image'] = $newImage;
-                Storage::disk(config('filesystems.default'))->put($newImage, File::get($image));
-                Storage::disk(config('filesystems.default'))->delete($product->image);
             }
             $result = $this->productRepository->update($id, $data);
             DB::commit();
@@ -78,7 +86,7 @@ class ProductService
     {
         try {
             $product = $this->productRepository->find($id);
-            Storage::disk(config('filesystems.default'))->delete($product->image);
+            $this->handleUploadedImage(null, $product);
             $result = $this->productRepository->destroy($id);
 
             return $result;

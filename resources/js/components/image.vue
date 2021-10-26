@@ -1,17 +1,12 @@
 <template>
-  <img
-    :src="url"
-    :width="width"
-    :height="height"
-  >
-  </img>
+  <img :src="url" :width="width" :height="height" />
 </template>
 
 <script>
 export default {
   props: {
-    type: {
-      url: String,
+    url: {
+      type: String,
       required: true,
     },
     width: {
@@ -22,6 +17,6 @@ export default {
       type: String,
       required: false,
     },
-  }
+  },
 };
 </script>

@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Services\TaskService;
-use App\Models\Tasks;
+use App\Models\Task;
 
 class TaskController extends Controller
 {
@@ -17,7 +17,9 @@ class TaskController extends Controller
 
     public function index()
     {
-        return $this->taskService->index();
+        $tasks = $this->taskService->index();
+
+        return view('tasks.index', compact('tasks'));
     }
 
     /**
@@ -27,9 +29,9 @@ class TaskController extends Controller
      */
     public function create()
     {
-        $this->authorize('create', Tasks::class);
+        $this->authorize('create', Task::class);
 
-        return view('task.create');
+        return view('tasks.create');
     }
 
     /**
@@ -60,11 +62,11 @@ class TaskController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Tasks $task)
+    public function edit(Task $task)
     {
         $this->authorize('update', $task);
 
-        return view('task.edit')->with(compact('task'));
+        return view('tasks.edit')->with(compact('task'));
     }
 
     /**
@@ -85,7 +87,7 @@ class TaskController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Tasks $task)
+    public function destroy(Task $task)
     {
         $this->authorize('delete', $task);
     }

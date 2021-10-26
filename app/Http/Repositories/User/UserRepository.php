@@ -14,6 +14,6 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
 
     public function getAll()
     {
-        return $this->model->with('role')->orderBy('id', 'desc')->get();
+        return $this->model->with('role')->latest('id')->get();
     }
 }

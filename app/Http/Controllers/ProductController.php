@@ -24,7 +24,7 @@ class ProductController extends Controller
     {
         $products = $this->productService->getAll();
 
-        return view('product.index', [
+        return view('products.index', [
             "products" => $products,
         ]);
     }
@@ -38,7 +38,7 @@ class ProductController extends Controller
     {
         $categories = $this->categoryService->getAll();
 
-        return view('product.create', compact('categories'));
+        return view('products.create', compact('categories'));
     }
 
     /**
@@ -51,9 +51,9 @@ class ProductController extends Controller
     {
         try {
             $this->productService->store($request->validated());
-            session()->flash('status', 'Thêm sản phẩm thành công');
+            session()->flash('status',  __('Thêm :name thành công', ['name' => 'sản phẩm']));
 
-            return redirect()->route('product.index');
+            return redirect()->route('admin.products.index');
         } catch (\Exception $e) {
             return redirect()->back()->withErrors($e->getMessage());
         }
@@ -83,11 +83,11 @@ class ProductController extends Controller
             $categories = $this->categoryService->getAll();
             $product = $this->productService->findProductById($id);
             if (empty($product)) {
-                session()->flash('status', 'Sản phẩm không tồn tại');
+                session()->flash('status', __(':name không tồn tại', ['name' => 'sản phẩm']));
 
-                return redirect()->route('product.index');
+                return redirect()->route('admin.products.index');
             } else {
-                return view('product.edit', [
+                return view('products.edit', [
                     "product" => $product,
                     "categories" => $categories
                 ]);
@@ -108,9 +108,9 @@ class ProductController extends Controller
     {
         try {
             $this->productService->update($request->validated(), $id);
-            session()->flash('status', 'Cập nhật sản phẩm thành công');
+            session()->flash('status', __('Cập nhật :name thành công', ['name' => 'sản phẩm']));
 
-            return redirect()->route('product.index');
+            return redirect()->route('admin.products.index');
         } catch (\Exception $e) {
             return abort(500);
         }
@@ -137,9 +137,9 @@ class ProductController extends Controller
     {
         try {
             $this->productService->activeProduct($id);
-            session()->flash('status', 'Cập nhật trạng thái sản phẩm thành công');
+            session()->flash('status', __('Cập nhật trạng thái :name thành công', ['name' => 'sản phẩm']));
 
-            return redirect()->route('product.index');
+            return redirect()->route('admin.products.index');
         } catch (\Exception $e) {
             return abort(500);
         }
