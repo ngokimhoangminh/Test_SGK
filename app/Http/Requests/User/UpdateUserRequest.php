@@ -27,6 +27,7 @@ class UpdateUserRequest extends FormRequest
             'role_id' => 'required'
         ];
     }
+
     public function messages()
     {
         return [

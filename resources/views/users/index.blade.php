@@ -18,7 +18,7 @@
         </div>
         <div class="max-w-7xl mx-auto py-3 sm:px-6 lg:px-0">
             <div class="flex flex-row-reverse pr-px-30">
-                <button-action redirect="{{ route('user.create') }}">
+                <button-action redirect="{{ route('admin.users.create') }}">
                     Thêm
                 </button-action>
             </div>
@@ -46,11 +46,12 @@
                         <td class="align-middle">{{ $user->email }}</td>
                         <td class="align-middle">{{ $user->role->name }}</td>
                         <td>
-                            <button-action class-name="btn btn-success" :redirect="`{{ route('user.edit', $user) }}`">
+                            <button-action class-name="btn btn-success"
+                                :redirect="`{{ route('admin.users.edit', $user) }}`">
                                 <i class="fas fa-edit"></i>
                             </button-action>
                             <confirm-delete name="{{ $user->name }}" :id="{{ $user->id }}"
-                                route="{{ route('user.destroy', $user) }}">
+                                route="{{ route('admin.users.destroy', $user) }}">
                             </confirm-delete>
                         </td>
                     </tr>
@@ -59,30 +60,31 @@
             </table>
         </div>
     </div>
-</x-app-layout>
-
-<script type="text/javascript">
-$(function() {
-    $('#data_tables').DataTable({
-        "aLengthMenu": [
-            [5, 10, 15, -1],
-            [5, 10, 15, "Tất Cả"]
-        ],
-        "iDisplayLength": 5,
-        "ordering": false,
-        "language": {
-            "sLengthMenu": "Hiển thị _MENU_ record trên 1 trang",
-            "sZeroRecords": "Không tìm thấy dữ liệu",
-            "info": "Hiển thị trang _PAGE_ trong tổng số _PAGES_ trang",
-            "sInfoEmpty": "Không có dữ liệu nào",
-            "sInfoFiltered": "(được lọc từ tổng sô _MAX_ trong dữ liệu)",
-            "sSearch": "Tìm kiếm:",
-            "sShow": "Hiển Thị:",
-            "oPaginate": {
-                "sNext": "Sau",
-                "sPrevious": "Trước"
+    @push('after-script')
+    <script type="text/javascript">
+    $(function() {
+        $('#data_tables').DataTable({
+            "aLengthMenu": [
+                [5, 10, 15, -1],
+                [5, 10, 15, "Tất Cả"]
+            ],
+            "ordering": false,
+            "iDisplayLength": 5,
+            "language": {
+                "sLengthMenu": "Hiển thị _MENU_ record trên 1 trang",
+                "sZeroRecords": "Không tìm thấy dữ liệu",
+                "info": "Hiển thị trang _PAGE_ trong tổng số _PAGES_ trang",
+                "sInfoEmpty": "Không có dữ liệu nào",
+                "sInfoFiltered": "(được lọc từ tổng sô _MAX_ trong dữ liệu)",
+                "sSearch": "Tìm kiếm:",
+                "sShow": "Hiển Thị:",
+                "oPaginate": {
+                    "sNext": "Sau",
+                    "sPrevious": "Trước"
+                },
             },
-        },
+        });
     });
-});
-</script>
+    </script>
+    @endpush
+</x-app-layout>

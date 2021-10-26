@@ -28,6 +28,7 @@ class StoreProductRequest extends FormRequest
                 'status' => 'required'
             ];
     }
+    
     public function messages(){
         return [
             'name.required' => 'Yêu cầu nhập tên sản phẩm',
@@ -43,5 +44,3 @@ class StoreProductRequest extends FormRequest
         ];
     }
 }
-
-?>

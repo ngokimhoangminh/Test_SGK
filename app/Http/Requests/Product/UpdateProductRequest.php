@@ -29,6 +29,7 @@ class UpdateProductRequest extends FormRequest
                 'status' => 'required'
             ];
     }
+    
     public function messages(){
         return [
             'name.required' => 'Yêu cầu nhập tên sản phẩm',
@@ -43,5 +44,3 @@ class UpdateProductRequest extends FormRequest
         ];
     }
 }
-
-?>

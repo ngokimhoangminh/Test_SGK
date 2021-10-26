@@ -6,7 +6,7 @@
     </x-slot>
 
     <div class="container">
-        <form method="POST" action="{{ route('user.update',$user) }}">
+        <form method="POST" action="{{ route('admin.users.update',$user) }}">
             @method('PUT')
             @csrf
             <div class="row">
@@ -14,14 +14,14 @@
                     <label-name> Tên Người Dùng </label-name>
                     <input-form name="name" value="{{ $user->name }}"></input-form>
                     @error('name')
-                    <message-toast class-name="alert alert-danger mt-1" message="{{ $message  }}"></message-toast>
+                    <message-toast class-name="alert alert-danger mt-1" message="{{ $message }}"></message-toast>
                     @enderror
                 </div>
                 <div class="form-group col-md-6">
                     <label-name> Email </label-name>
                     <input-form name="email" value="{{ $user->email }}"></input-form>
                     @error('email')
-                    <message-toast class-name="alert alert-danger mt-1" message="{{ $message  }}"></message-toast>
+                    <message-toast class-name="alert alert-danger mt-1" message="{{ $message }}"></message-toast>
                     @enderror
                 </div>
                 <div class="form-group col-md-6">
@@ -33,7 +33,7 @@
                     </span>
                     @error('password')
                     <message-toast class-name="alert alert-danger mt-1 @error('password') is-invalid @enderror"
-                        message="{{ $message  }}"></message-toast>
+                        message="{{ $message }}"></message-toast>
                     @enderror
                 </div>
                 <div class="form-group col-md-6">

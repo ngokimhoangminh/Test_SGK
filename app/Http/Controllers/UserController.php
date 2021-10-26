@@ -52,9 +52,9 @@ class UserController extends Controller
     {
         try {
             $this->userService->store($request->validated());
-            session()->flash('status', 'Thêm người dùng thành công');
+            session()->flash('status',  __('Thêm :name thành công', ['name' => 'người dùng']));
 
-            return redirect()->route('user.index');
+            return redirect()->route('admin.users.index');
         } catch (\Exception $e) {
             return abort(500);
         }
@@ -83,7 +83,7 @@ class UserController extends Controller
             $roles = $this->roleService->getAll();
             $user = $this->userService->findUserById($id);
             if (empty($user)) {
-                session()->flash('status', 'Người dùng không tồn tại');
+                session()->flash('status', __(':name không tồn tại', ['name' => 'người dùng']));
 
                 return redirect()->route('user.index');
             } else {
@@ -108,9 +108,9 @@ class UserController extends Controller
     {
         try {
             $this->userService->update($request->validated(), $id);
-            session()->flash('status', 'Cập nhật người dùng thành công');
+            session()->flash('status', __('Cập nhật :name thành công', ['name' => 'người dùng']));
 
-            return redirect()->route('user.index');
+            return redirect()->route('admin.users.index');
         } catch (\Exception $e) {
             return redirect()->back()->withErrors($e->getMessage());
         }

@@ -5,7 +5,7 @@
       :type="type"
       v-model="valueUpdate"
       :name="name"
-      @keyup="onChange()"
+      @keyup="onKeyUp()"
     />
     <input
       class="form-control"
@@ -43,8 +43,8 @@ export default {
     };
   },
   methods: {
-    onChange() {
-      this.isShow = this.valueUpdate.length > 0 ? true : false;
+    onKeyUp() {
+      this.isShow = this.valueUpdate.length > 0 ? false : true;
     },
     onClick() {
       if (this.type == "password") {

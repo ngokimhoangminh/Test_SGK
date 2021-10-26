@@ -2,12 +2,12 @@
 
 namespace App\Policies;
 
-use App\Models\Tasks;
+use App\Models\Task;
 use App\Models\User;
-use App\Models\Roles;
+use App\Models\Role;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class TasksPolicy
+class TaskPolicy
 {
     use HandlesAuthorization;
 
@@ -29,7 +29,7 @@ class TasksPolicy
      * @param  \App\Models\Tasks  $tasks
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function view(User $user, Tasks $tasks)
+    public function view(User $user, Task $tasks)
     {
         //
     }
@@ -43,13 +43,13 @@ class TasksPolicy
     public function create(User $user)
     {
         //
-        return $user->role_id == Roles::IS_ADMIN;
+        return $user->role_id == Role::IS_ADMIN;
     }
 
 
-    public function update(User $user, Tasks $tasks)
+    public function update(User $user, Task $tasks)
     {
-        return $tasks->user_id == $user->id && in_array( $user->role_id, [ Roles::IS_ADMIN, Roles::IS_MANAGER ] );
+        return $tasks->user_id == $user->id && in_array($user->role_id, [Role::IS_ADMIN, Role::IS_MANAGER]);
     }
 
     /**
@@ -59,10 +59,10 @@ class TasksPolicy
      * @param  \App\Models\Tasks  $tasks
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function delete(User $user, Tasks $tasks)
+    public function delete(User $user, Task $tasks)
     {
         //
-        return $tasks->user_id == $user->id && in_array( $user->role_id, [ Roles::IS_ADMIN, Roles::IS_MANAGER ] );
+        return $tasks->user_id == $user->id && in_array($user->role_id, [Role::IS_ADMIN, Role::IS_MANAGER]);
     }
 
     /**
@@ -72,7 +72,7 @@ class TasksPolicy
      * @param  \App\Models\Tasks  $tasks
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function restore(User $user, Tasks $tasks)
+    public function restore(User $user, Task $tasks)
     {
         //
     }
@@ -84,7 +84,7 @@ class TasksPolicy
      * @param  \App\Models\Tasks  $tasks
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function forceDelete(User $user, Tasks $tasks)
+    public function forceDelete(User $user, Task $tasks)
     {
         //
     }
