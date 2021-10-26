@@ -7,7 +7,7 @@
     </x-slot>
 
     <div class="container">
-        <form method="POST" action="{{ route('user.update',$task) }}">
+        <form method="POST" action="{{ route('task.update',$task) }}">
             @method('PUT')
             @csrf
             <div class="row">

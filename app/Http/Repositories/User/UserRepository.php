@@ -3,8 +3,9 @@
 namespace App\Http\Repositories\User;
 
 use App\Http\Repositories\BaseRepository;
+use App\Http\Repositories\User\UserRepositoryInterface;
 
-class UserRepository extends BaseRepository
+class UserRepository extends BaseRepository implements UserRepositoryInterface
 {
     public function getModel()
     {
